@@ -6,8 +6,8 @@
 //
 
 #import <GoogleMaps/GoogleMaps.h>
+#import <React/RCTBridge.h>
 #import "AIRGMSMarker.h"
-#import "RCTBridge.h"
 #import "AIRGoogleMap.h"
 #import "AIRGoogleMapCallout.h"
 
@@ -26,6 +26,9 @@
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *subtitle;
 @property (nonatomic, strong) UIColor *pinColor;
+@property (nonatomic, assign) CGPoint anchor;
+@property (nonatomic, assign) NSInteger zIndex;
+@property (nonatomic, assign) double opacity;
 @property (nonatomic, assign) BOOL draggable;
 
 - (void)showCalloutView;

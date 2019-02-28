@@ -20,6 +20,7 @@ import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
 
 import java.util.Map;
 
@@ -72,12 +73,6 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         return new AirMapView(context, this.appContext.getCurrentActivity(), this, this.googleMapOptions);
     }
 
-    @Override
-    public void onDropViewInstance(AirMapView view) {
-        view.doDestroy();
-        super.onDropViewInstance(view);
-    }
-
     private void emitMapError(String message, String type) {
         WritableMap error = Arguments.createMap();
         error.putString("message", message);
@@ -97,6 +92,11 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     public void setMapType(AirMapView view, @Nullable String mapType) {
         int typeId = MAP_TYPES.get(mapType);
         view.map.setMapType(typeId);
+    }
+    
+    @ReactProp(name = "customMapStyleString")
+    public void setMapStyle(AirMapView view, @Nullable String customMapStyleString) {
+        view.map.setMapStyle(new MapStyleOptions(customMapStyleString));
     }
 
     @ReactProp(name = "showsUserLocation", defaultBoolean = false)
@@ -155,22 +155,27 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         view.map.getUiSettings().setRotateGesturesEnabled(rotateEnabled);
     }
 
-    @ReactProp(name="cacheEnabled", defaultBoolean = false)
+    @ReactProp(name = "cacheEnabled", defaultBoolean = false)
     public void setCacheEnabled(AirMapView view, boolean cacheEnabled) {
         view.setCacheEnabled(cacheEnabled);
     }
 
-    @ReactProp(name="loadingEnabled", defaultBoolean = false)
+    @ReactProp(name = "loadingEnabled", defaultBoolean = false)
     public void setLoadingEnabled(AirMapView view, boolean loadingEnabled) {
         view.enableMapLoading(loadingEnabled);
     }
 
-    @ReactProp(name="loadingBackgroundColor", customType="Color")
+    @ReactProp(name = "moveOnMarkerPress", defaultBoolean = true)
+    public void setMoveOnMarkerPress(AirMapView view, boolean moveOnPress) {
+        view.setMoveOnMarkerPress(moveOnPress);
+    }
+
+    @ReactProp(name = "loadingBackgroundColor", customType = "Color")
     public void setLoadingBackgroundColor(AirMapView view, @Nullable Integer loadingBackgroundColor) {
         view.setLoadingBackgroundColor(loadingBackgroundColor);
     }
 
-    @ReactProp(name="loadingIndicatorColor", customType="Color")
+    @ReactProp(name = "loadingIndicatorColor", customType = "Color")
     public void setLoadingIndicatorColor(AirMapView view, @Nullable Integer loadingIndicatorColor) {
         view.setLoadingIndicatorColor(loadingIndicatorColor);
     }

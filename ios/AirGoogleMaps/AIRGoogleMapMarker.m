@@ -7,10 +7,10 @@
 
 #import "AIRGoogleMapMarker.h"
 #import <GoogleMaps/GoogleMaps.h>
+#import <React/RCTImageLoader.h>
+#import <React/RCTUtils.h>
 #import "AIRGMSMarker.h"
 #import "AIRGoogleMapCallout.h"
-#import "RCTImageLoader.h"
-#import "RCTUtils.h"
 #import "DummyView.h"
 
 CGRect unionRect(CGRect a, CGRect b) {
@@ -173,6 +173,11 @@ CGRect unionRect(CGRect a, CGRect b) {
   return _realMarker.onPress;
 }
 
+- (void)setOpacity:(double)opacity
+{
+  _realMarker.opacity = opacity;
+}
+
 - (void)setImageSrc:(NSString *)imageSrc
 {
   _imageSrc = imageSrc;
@@ -182,12 +187,25 @@ CGRect unionRect(CGRect a, CGRect b) {
     _reloadImageCancellationBlock = nil;
   }
 
+  if (!_imageSrc) {
+    if (_iconImageView) [_iconImageView removeFromSuperview];
+    return;
+  }
+
+  if (!_iconImageView) {
+    // prevent glitch with marker (cf. https://github.com/airbnb/react-native-maps/issues/738)
+    UIImageView *empyImageView = [[UIImageView alloc] init];
+    _iconImageView = empyImageView;
+    [self iconViewInsertSubview:_iconImageView atIndex:0];
+  }
+
   _reloadImageCancellationBlock = [_bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
                                                                           size:self.bounds.size
                                                                          scale:RCTScreenScale()
                                                                        clipped:YES
                                                                     resizeMode:RCTResizeModeCenter
                                                                  progressBlock:nil
+                                                              partialLoadBlock:nil
                                                                completionBlock:^(NSError *error, UIImage *image) {
                                                                  if (error) {
                                                                    // TODO(lmr): do something with the error?
@@ -224,9 +242,6 @@ CGRect unionRect(CGRect a, CGRect b) {
 
                                                                    _iconImageView = imageView;
                                                                    [self iconViewInsertSubview:imageView atIndex:0];
-
-                                                                   // TODO: This could be a prop
-                                                                   //_realMarker.groundAnchor = CGPointMake(0.75, 1);
                                                                  });
                                                                }];
 }
@@ -250,6 +265,18 @@ CGRect unionRect(CGRect a, CGRect b) {
 - (void)setPinColor:(UIColor *)pinColor {
   _pinColor = pinColor;
   _realMarker.icon = [GMSMarker markerImageWithColor:pinColor];
+}
+
+- (void)setAnchor:(CGPoint)anchor {
+  _anchor = anchor;
+  _realMarker.groundAnchor = anchor;
+}
+
+
+- (void)setZIndex:(NSInteger)zIndex
+{
+  _zIndex = zIndex;
+  _realMarker.zIndex = (int)zIndex;
 }
 
 - (void)setDraggable:(BOOL)draggable {

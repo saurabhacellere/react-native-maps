@@ -6,6 +6,8 @@ import {
   Dimensions,
   ScrollView,
 } from 'react-native';
+// eslint-disable-next-line max-len
+import SyntheticEvent from 'react-native/Libraries/Renderer/src/renderers/shared/stack/event/SyntheticEvent';
 import MapView from 'react-native-maps';
 import PriceMarker from './PriceMarker';
 
@@ -65,13 +67,15 @@ class EventListener extends React.Component {
 
   recordEvent(name) {
     return e => {
-      const { events } = this.state;
-      this.setState({
+      if (e instanceof SyntheticEvent && typeof e.persist === 'function') {
+        e.persist();
+      }
+      this.setState(prevState => ({
         events: [
           this.makeEvent(e, name),
-          ...events.slice(0, 10),
+          ...prevState.events.slice(0, 10),
         ],
-      });
+      }));
     };
   }
 
@@ -123,6 +127,34 @@ class EventListener extends React.Component {
               </View>
             </MapView.Callout>
           </MapView.Marker>
+          <MapView.Polygon
+            fillColor={'rgba(255,0,0,0.3)'}
+            onPress={this.recordEvent('Polygon::onPress')}
+            coordinates={[{
+              latitude: LATITUDE + (LATITUDE_DELTA / 5),
+              longitude: LONGITUDE + (LONGITUDE_DELTA / 4),
+            }, {
+              latitude: LATITUDE + (LATITUDE_DELTA / 3),
+              longitude: LONGITUDE + (LONGITUDE_DELTA / 4),
+            }, {
+              latitude: LATITUDE + (LATITUDE_DELTA / 4),
+              longitude: LONGITUDE + (LONGITUDE_DELTA / 2),
+            }]}
+          />
+          <MapView.Polyline
+            strokeColor={'rgba(255,0,0,1)'}
+            onPress={this.recordEvent('Polyline::onPress')}
+            coordinates={[{
+              latitude: LATITUDE + (LATITUDE_DELTA / 5),
+              longitude: LONGITUDE - (LONGITUDE_DELTA / 4),
+            }, {
+              latitude: LATITUDE + (LATITUDE_DELTA / 3),
+              longitude: LONGITUDE - (LONGITUDE_DELTA / 4),
+            }, {
+              latitude: LATITUDE + (LATITUDE_DELTA / 4),
+              longitude: LONGITUDE - (LONGITUDE_DELTA / 2),
+            }]}
+          />
         </MapView>
         <View style={styles.eventList}>
           <ScrollView>
