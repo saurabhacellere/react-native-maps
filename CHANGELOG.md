@@ -1,5 +1,39 @@
 # Change Log
 
+## 0.13.0 (January 6, 2017)
+
+### Breaking Changes
+
+* Update iOS header imports and JS SyntheticEvent import for RN 0.40
+  [#923](https://github.com/airbnb/react-native-maps/pull/923)
+  (@ide)
+
+### Patches
+
+* Fix issue where callouts sometimes overlap or don't appear
+  [#936](https://github.com/airbnb/react-native-maps/pull/936)
+  (@RajkumarPunchh)
+
+## 0.12.3 (January 6, 2017)
+
+### Patches
+
+* Fix "Animating with MapViews" example – fixes #763
+  [#888](https://github.com/airbnb/react-native-maps/pull/888)
+  (@javiercr)
+* [iOS] Fix "Option 2" method of building Google Maps
+  [#900](https://github.com/airbnb/react-native-maps/pull/900)
+  (@vjeranc)
+* [Android] Fix exception when animating region during initialization
+  [#901](https://github.com/airbnb/react-native-maps/pull/901)
+  (@mlanter)
+* Updated documentation
+  [#902](https://github.com/airbnb/react-native-maps/pull/902),
+  [#904](https://github.com/airbnb/react-native-maps/pull/904),
+  [#910](https://github.com/airbnb/react-native-maps/pull/910)
+  (@anami, @dboydor, @ali-alamine)
+
+
 ## 0.12.2 (December 9, 2016)
 
 ### Patches

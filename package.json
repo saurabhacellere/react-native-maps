@@ -3,10 +3,11 @@
   "description": "React Native Mapview component for iOS + Android",
   "main": "index.js",
   "author": "Leland Richardson <leland.m.richardson@gmail.com>",
-  "version": "0.12.2",
+  "version": "0.13.0",
   "scripts": {
     "start": "react-native start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "version": "auto-changelog --package; git add CHANGELOG.md"
   },
   "repository": {
     "type": "git",
@@ -22,10 +23,11 @@
     "mapkit"
   ],
   "peerDependencies": {
-    "react": ">=15.3.1",
-    "react-native": ">=0.35"
+    "react": ">=15.4.0",
+    "react-native": ">=0.40"
   },
   "devDependencies": {
+    "auto-changelog": "^0.3.1",
     "babel-eslint": "^6.1.2",
     "eslint": "^3.3.1",
     "eslint-config-airbnb": "^10.0.1",

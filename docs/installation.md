@@ -22,15 +22,14 @@ react-native link
 1. Setup your `Podfile` like the included [example/ios/Podfile](../example/ios/Podfile), replace all references to `AirMapExplorer` with your project name, and then run `pod install`.
    (If you do not need `GoogleMaps` support for iOS, then you can probably completely skip this step.)
 1. Open your project in Xcode workspace
-1. Drag the following folder into your project:
-    - `node_modules/react-native-maps/ios/AirMaps/`
-1. If you need `GoogleMaps` support also drag this folder into your project:
-    - `node_modules/react-native-maps/ios/AirGoogleMaps/`
+1. If you need `GoogleMaps` support also 
+    - Drag this folder `node_modules/react-native-maps/ios/AirGoogleMaps/` into your project, and choose `Create groups` in the popup window.
+    - In `AppDelegate.m`, add `@import GoogleMaps;` before `@implementation AppDelegate`. In `- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions`, add `[GMSServices provideAPIKey:@"YOUR_GOOGLE_MAP_API_KEY"];`
+    - In your project's `Build Settings` > `Header Search Paths`, double click the value field. In the popup, add `$(SRCROOT)/../node_modules/react-native-maps/ios/AirMaps` and change `non-recursive` to `recursive`. (Dragging the folder `node_modules/react-native-maps/ios/AirMaps/` into your project introduces duplicate symbols. We should not do it.)
 
-### Option 2: CocoaPods -- Untested Way
-NOTE: If you actually get this to work, please open an issue to let us know.
-This is now considered the **old way** because it is untested and if it does work at all, it
-will only work if you **don't** have `use_frameworks!` in your `Podfile`
+### Option 2: CocoaPods
+This is now considered the **old way** because it will only work if you **don't** have
+`use_frameworks!` in your `Podfile`.
 
 To install using Cocoapods, simply insert the following line into your `Podfile`:
 
@@ -74,7 +73,7 @@ After your `Podfile` is setup properly, run `pod install`.
    }
    ```
    
-   If you have a different play serivces than the one included in this library, use the following instead (switch 10.0.1 for the desired version):
+   If you have a different play services than the one included in this library, use the following instead (switch 10.0.1 for the desired version):
    
    ```groovy
    ...
@@ -115,7 +114,7 @@ After your `Podfile` is setup properly, run `pod install`.
 Source: https://developers.google.com/maps/documentation/android-api/signup
 
 1. Ensure that you have Google Play Services installed:
-  * For Genymotion you can follow [these instructions](http://stackoverflow.com/a/20137324/1424349).
+  * For Genymotion you can follow [these instructions](https://www.genymotion.com/help/desktop/faq/#google-play-services).
   * For a physical device you need to search on Google for 'Google Play Services'. There will be a link that takes you to the Play Store and from there you will see a button to update it (do not search within the Play Store).
 
 ## Troubleshooting
@@ -190,6 +189,7 @@ You have to link dependencies with rnpm and re-run the build:
     - Extras / Google Play services
     - Extras / Google Repository
     - Android 6.0 (API 23) / Google APIs Intel x86 Atom System Image Rev. 19
+    - Android SDK Build-tools 23.0.3 
 1. Check manual installation steps if you didn't run "react-native link"
 1. Go to [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend) and select your project, or create one.
 Then, once enabled, select `Go to credentials`.
@@ -212,3 +212,5 @@ Enter the name of the API key and create it.
    gradlew clean
    cd ..
   ```
+  
+1. If you are using Android Virtual Devices (AVD), ensure that `Use Host GPU` is checked in the settings for your virtual device.
